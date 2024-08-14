@@ -11,6 +11,7 @@
       rel="stylesheet"
       href="https://bootswatch.com/5/cosmo/bootstrap.css"
     />
+    <link rel="icon" href="/logoCarla.jpg" type="image/x-icon">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <!-- Firebase Realtime Database -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -44,7 +45,7 @@
     <div class="row">
       <div class="col-4">
         <img
-          src="https://content.wepik.com/statics/33476734/preview-page0.jpg"
+          src="/logoCarla.jpg"
           alt="logo"
         />
       </div>
@@ -54,7 +55,7 @@
     </div>
     <hr />
     <div class="container">
-      <h2>Registrar Paquetes</h2>
+      <h2 class="text-primary">Registrar Paquetes</h2>
       <form id="seguimientoForm">
         <select class="form-select" id="repartidorSelect" required></select>
         <br />
@@ -72,7 +73,7 @@
       </form>
       <br />
       <hr>
-      <h2>Filtrar por Rango de Fechas</h2>
+      <h2 class="text-primary">Filtrar por Rango de Fechas</h2>
       <form id="rangoFechaForm">
         <label for="fechaInicio">Fecha de Inicio:</label>
         <input class="form-control" type="date" id="fechaInicio" required />
@@ -87,11 +88,11 @@
         <button class="form-control" type="submit">Filtrar</button>
       </form>
       <div id="resultadosRango"></div>
-      
-      <button onclick="pdfcall()">crear pdf</button>
+
+      <button class="btn btn-danger" onclick="pdfcall()">crear pdf</button>
       <br>
       <hr>
-      <h2>Repartidores</h2>
+      <h2 class="text-primary">Repartidores</h2>
       
       <form id="repartidorForm">
         <div class="row">
