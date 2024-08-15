@@ -139,13 +139,20 @@ function poblarSelects() {
 document.getElementById('seguimientoForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
+    const selectElement = document.getElementById('repartidorSelect');
+    const nombre = selectElement.options[selectElement.selectedIndex].text
+
     const repartidorId = document.getElementById('repartidorSelect').value;
     const fecha = document.getElementById('fecha').value;
     const paquetes = parseInt(document.getElementById('paquetes').value, 10);
 
+    
     db.ref('seguimiento/' + repartidorId + '/' + fecha).set({
         paquetes: paquetes
     });
+    db.ref('asistencia/'+fecha+"/"+nombre).set({
+        paquetes: paquetes
+    })
 
     document.getElementById('paquetes').value = "";
     alert("Datos registrados");
@@ -265,4 +272,88 @@ function poblarSelectRango() {
 
 // Llamada inicial para poblar el select al cargar la página
 poblarSelectRango();
+
+
+async function generarReporteRangoFechas() {
+
+    const doc = new jsPDF();
+    const fechaInicio = document.getElementById('fechaInicio').value;
+    const fechaFin = document.getElementById('fechaFin').value;
+    doc.setFontSize(14);
+    doc.text(20, 20, `Reporte de Repartidores - ${fechaInicio} a ${fechaFin}`);
+    doc.setFontSize(10);
+
+    
+
+    const db = firebase.database();
+    const repartidoresRef = db.ref('asistencia');
+
+    // Convierte las fechas a un formato comparable
+    const inicio = new Date(fechaInicio);
+    const fin = new Date(fechaFin);
+
+    // Consulta la base de datos para obtener los repartidores
+    const snapshot = await repartidoresRef.once('value');
+    const repartidores = snapshot.val();
+   
+
+    // Filtro de repartidores que trabajaron en el rango de fechas
+    const repartidoresFiltrados = [];
+    let yPosicionFecha = 40
+    let yPosicionRepartidor = 45
+    
+    for (let key in repartidores) {
+        
+        
+        if(key >= fechaInicio && key <= fechaFin){
+            if(yPosicionFecha > 300){
+                console.log("entro  ")
+                doc.addPage();
+                yPosicionFecha = 20
+                yPosicionRepartidor = 25
+            }
+            const repartidoresActivos = repartidores[key];
+            doc.setFontSize(15);
+            doc.text(10,yPosicionFecha,key)
+            doc.setFontSize(10);
+            
+            
+            for(let key2 in repartidoresActivos){
+                if(yPosicionRepartidor > 290){
+                    console.log("entro aqui")
+                    doc.addPage();
+                    yPosicionFecha = 20
+                    yPosicionRepartidor = 25
+                }
+                console.log(key2,yPosicionRepartidor,key)
+                doc.text(20,yPosicionRepartidor,key2)
+                yPosicionRepartidor += 5
+            }
+
+            yPosicionFecha = yPosicionRepartidor + 10
+            yPosicionRepartidor =yPosicionFecha + 5
+            
+            
+        }
+        
+        
+    }
+
+    // Generación del PDF
+    
+    
+
+    let yPosition = 30;
+    for (let repartidor of repartidoresFiltrados) {
+        doc.text(20, yPosition, `Nombre: ${repartidor.nombre}`);
+        doc.text(20, yPosition + 10, `Fecha de trabajo: ${repartidor.fecha}`);
+        doc.text(20, yPosition + 20, `Teléfono: ${repartidor.telefono}`);
+        doc.text(20, yPosition + 30, `Número de Ruta: ${repartidor.numeroRuta}`);
+        yPosition += 40;
+        doc.line(10, yPosition - 10, 200, yPosition - 10); // Línea divisoria
+    }
+
+    doc.save(`Reporte_Repartidores_${fechaInicio}_a_${fechaFin}.pdf`);
+}
+
 

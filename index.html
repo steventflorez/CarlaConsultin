@@ -55,7 +55,7 @@
     </div>
     <hr />
     <div class="container">
-      <h2 class="text-primary">Registrar Paquetes</h2>
+      <h2 class="text-primary">Registrar Dia</h2>
       <form id="seguimientoForm">
         <select class="form-select" id="repartidorSelect" required></select>
         <br />
@@ -85,7 +85,8 @@
         <select class="form-select" id="filtrarRepartidorRango" required></select>
         <br>
 
-        <button class="form-control" type="submit">Filtrar</button>
+        <button class="form-control" type="submit">Filtrar 1 repartidor</button>
+        <button onclick="generarReporteRangoFechas()" class="form-control" type="button">Filtrar todos los repartidores</button>
       </form>
       <div id="resultadosRango"></div>
 
