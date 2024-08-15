@@ -8,10 +8,10 @@ document.getElementById('repartidorForm').addEventListener('submit', function(e)
     
     const numeroRuta = document.getElementById('numeroRuta').value;
     const telefono = document.getElementById('telefono').value;
-    console.log(telefono)
+    let nombreRuta = nombre+" - "+numeroRuta
     const nuevoRepartidorRef = db.ref('repartidores').push();
     nuevoRepartidorRef.set({
-        nombre: nombre,
+        nombre: nombreRuta,
         numero_ruta: numeroRuta,
         telefono: telefono
     });
